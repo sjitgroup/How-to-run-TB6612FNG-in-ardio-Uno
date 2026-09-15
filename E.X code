@@ -1,0 +1,88 @@
+// Motor A connections
+int pwmA = 3;
+int Ain1 = 5;
+int Ain2 = 4;
+
+// Motor B connections
+int pwmB = 9;
+int Bin1 = 7;
+int Bin2 = 8;
+
+void setup() {
+  // Set all the motor control pins to outputs
+  pinMode(pwmA, OUTPUT);
+  pinMode(pwmB, OUTPUT);
+  pinMode(Ain1, OUTPUT);
+  pinMode(Ain2, OUTPUT);
+  pinMode(Bin1, OUTPUT);
+  pinMode(Bin2, OUTPUT);
+
+  // Turn off motors - Initial state
+  digitalWrite(Ain1, LOW);
+  digitalWrite(Ain2, LOW);
+  digitalWrite(Bin1, LOW);
+  digitalWrite(Bin2, LOW);
+}
+
+void loop() {
+  directionControl();
+  delay(1000);
+  speedControl();
+  delay(1000);
+}
+
+// This function lets you control spinning direction of motors
+void directionControl() {
+  // Set motors to maximum speed
+  digitalWrite(pwmA, HIGH);
+  digitalWrite(pwmB, HIGH);
+
+  // Turn on motor A & B
+  digitalWrite(Ain1, HIGH);
+  digitalWrite(Ain2, LOW);
+  digitalWrite(Bin1, HIGH);
+  digitalWrite(Bin2, LOW);
+  delay(2000);
+
+  // Now change motor directions
+  digitalWrite(Ain1, LOW);
+  digitalWrite(Ain2, HIGH);
+  digitalWrite(Bin1, LOW);
+  digitalWrite(Bin2, HIGH);
+  delay(2000);
+
+  // Turn off motors
+  digitalWrite(Ain1, LOW);
+  digitalWrite(Ain2, LOW);
+  digitalWrite(Bin1, LOW);
+  digitalWrite(Bin2, LOW);
+}
+
+// This function lets you control speed of the motors
+void speedControl() {
+  // Turn on motors
+  digitalWrite(Ain1, LOW);
+  digitalWrite(Ain2, HIGH);
+  digitalWrite(Bin1, LOW);
+  digitalWrite(Bin2, HIGH);
+
+  // Accelerate from zero to maximum speed
+  for (int i = 0; i < 256; i++) {
+    analogWrite(pwmA, i);
+    analogWrite(pwmB, i);
+    delay(20);
+  }
+
+  // Decelerate from maximum speed to zero
+  for (int i = 255; i >= 0; --i) {
+    analogWrite(pwmA, i);
+    analogWrite(pwmB, i);
+    delay(20);
+  }
+
+  // Now turn off motors
+  digitalWrite(Ain1, LOW);
+  digitalWrite(Ain2, LOW);
+  digitalWrite(Bin1, LOW);
+  digitalWrite(Bin2, LOW);
+}
